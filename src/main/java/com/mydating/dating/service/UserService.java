@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -128,4 +129,28 @@ public class UserService {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
+	
+	public ResponseEntity<?> searchByName(String letters){
+		
+		List<User> users= userDao.searchByName("%"+letters+"%");
+		
+		if(users.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User Found with this letter: "+letters);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.OK).body(users);
+		}
+	}
+
+	public ResponseEntity<?> searchByEmail(String email) {
+		List<User> users = userDao.searchByEmail("%"+email+"%");
+		
+		if(users.isEmpty()) {
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No email found with this letter: "+email);
+		}else {
+			return ResponseEntity.status(HttpStatus.OK).body(users);
+		}
+	}
+	
 }
